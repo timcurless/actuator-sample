@@ -23,7 +23,7 @@ podTemplate(
       stage('Build Docker Image') {
         container('docker') {
           withCredentials([[$class: 'UsernamePasswordMultiBinding',
-            credentialsId: 'timcurless+cje_robo_acct',
+            credentialsId: '0515b9d5-2cc5-4ef4-a355-9cc55ab47ffd',
             usernameVariable: 'QUAY_USER',
             passwordVariable: 'QUAY_PASS']]) {
               sh """
