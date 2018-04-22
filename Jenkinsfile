@@ -11,12 +11,22 @@ podTemplate(
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
   ]) {
     node(label) {
+      properties(
+        [
+            buildDiscarder(
+                logRotator(
+                    numToKeepStr: '7'
+                )
+            )
+        ]
+      )
       def myRepo = checkout scm
       def gitCommit = myRepo.GIT_COMMIT
 
       stage('Build App') {
         container('maven') {
           sh "mvn package -B"
+          archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
       }
 
@@ -27,7 +37,7 @@ podTemplate(
             usernameVariable: 'QUAY_USER',
             passwordVariable: 'QUAY_PASS']]) {
               sh """
-                docker login --username ${QUAY_USER} --password ${QUAY_PASS}
+                docker login --username ${QUAY_USER} --password ${QUAY_PASS} quay.io
                 docker build -t quay.io/timcurless/actuator-sample:${gitCommit} .
                 docker push quay.io/timcurless/actuator-sample:${gitCommit}
               """
