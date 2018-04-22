@@ -3,7 +3,7 @@ def label = "worker-${UUID.randomUUID().toString()}"
 
 podTemplate(
   label: label,
-  containers [
+  containers: [
     containerTemplate(name: 'maven', image: 'maven:alpine', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
   ],
