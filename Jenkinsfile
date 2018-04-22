@@ -1,58 +1,39 @@
-pipeline {
-  agent {
-    kubernetes {
-      label 'buildPod'
-      defaultContainer 'jnlp'
-      yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    jenkins-pipeline: bagapi-pipeline-build
-spec:
-  containers:
-  - name: maven
-    image: maven:alpine
-    command:
-    - cat
-    tty: true
-  - name: docker
-    image: cloudbees/java-with-docker-client
-    command:
-    - cat
-    tty: true
-"""
-    }
-  }
+#!/usr/bin/env groovy
+def label = "worker-${UUID.randomUUID().toString()}"
 
-  stages {
-    stage('Checkout Code') {
-      steps {
-        checkout scm
-      }
-    }
+podTemplate(
+  label: label,
+  containers [
+    containerTemplate(name: 'maven', image: 'maven:alpine', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
+  ],
+  volumes: [
+    hostPathToVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
+  ]) {
+    node(label) {
+      def myRepo = checkout scm
+      def gitCommit = myRepo.GIT_COMMIT
 
-    stage('Build App') {
-      steps {
+      stage('Build App') {
         container('maven') {
-          sh "mvn -v"
           sh "mvn package -B"
-          archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
       }
-    }
 
-    stage ('Build Container') {
-      steps {
+      stage('Build Docker Image') {
         container('docker') {
-          withCredentials(usernamePassword(credentialsId: 'timcurless+cje_robo_acct', usernameVariable: 'QUAY_USER',
-                            passwordVariable: 'QUAY_PASS'))
-          sh "docker build -t quay.io/timcurless/actuator-sample"
-          sh "docker login --username $QUAY_USER --password $QUAY_PASS quay.io"
-          sh "docker push quay.io/timcurless/actuator-sample"
+          withCredentials([[$class: 'UsernamePasswordMultiBinding',
+            credentialsId: 'timcurless+cje_robo_acct',
+            usernameVariable: 'QUAY_USER',
+            passwordVariable: 'QUAY_PASS']]) {
+              sh """
+                docker login --username ${QUAY_USER} --password ${QUAY_PASS}
+                docker build -t quay.io/timcurless/actuator-sample:${gitCommit} .
+                docker push quay.io/timcurless/actuator-sample:${gitCommit}
+              """
+            }
         }
       }
     }
   }
-
-}
+)
