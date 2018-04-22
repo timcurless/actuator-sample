@@ -2,26 +2,18 @@ pipeline {
   agent {
     kubernetes {
       label 'buildPod'
-      defaultContainer: 'jnlp'
-      yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    pipeline: bagapi-pipeline
-spec:
-  containers:
-  - name: maven
-    image: maven:3-alpine
-    command:
-    - cat
-    tty: true
-  - name: docker
-    image: cloudbees/java-with-docker-client
-    command:
-    - cat
-    tty: true
-"""
+      containerTemplate {
+        name 'maven'
+        image 'maven:3-alpine'
+        ttyEnabled true
+        command 'cat'
+      }
+      containerTemplate {
+        name 'docker'
+        image 'cloudbees/java-with-docker-client'
+        ttyEnabled true
+        command 'cat'
+      }
     }
   }
 
@@ -54,4 +46,5 @@ spec:
       }
     }
   }
+
 }
