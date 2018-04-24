@@ -55,7 +55,7 @@ podTemplate(
             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
           {
             sh """
-              . ~/.bashrc
+              echo "export PATH=/root/.local/bin:$PATH" >> ~/.bashrc
               aws eks list-clusters --region us-west-2
             """
           }
