@@ -56,7 +56,7 @@ podTemplate(
           {
             sh """
               uname -a
-              aws eks list-clusters --region us-west-2
+              env
             """
           }
         }
