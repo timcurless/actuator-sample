@@ -55,7 +55,7 @@ podTemplate(
             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
           {
             sh """
-              aws s3 ls --region us-west-2
+              aws eks list-clusters --region us-west-2
             """
           }
         }
