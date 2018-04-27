@@ -55,6 +55,8 @@ podTemplate(
             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
           {
             sh """
+              curl -O https://amazon-eks.s3-us-west-2.amazonaws.com/2018-04-04/eks-2017-11-01.normal.json
+              aws configure add-model --service-model file://eks-2017-11-01.normal.json --service-name eks
               aws eks list-clusters --region us-west-2
             """
           }
