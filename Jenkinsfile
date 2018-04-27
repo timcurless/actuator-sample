@@ -54,12 +54,13 @@ podTemplate(
             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
           {
-            sh """
+            sh "
               cat <<EOT > /root/.aws/credentials
               [default]
               aws_access_key_id=${AWS_ACCESS_KEY_ID}
               aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}
-              EOT
+              EOT"
+            sh """
               cat /root/.aws/credentials
               aws eks describe-cluster --cluster-name eks-dev --region us-west-2
             """
