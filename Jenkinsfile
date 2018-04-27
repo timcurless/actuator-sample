@@ -55,10 +55,7 @@ podTemplate(
             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
           {
             sh """
-              whoami
-              env
-              ls -al /usr/local
-              ls -al /usr/local/bin
+              find / | grep aws
               aws eks describe-cluster --cluster-name eks-dev --region us-west-2
             """
           }
