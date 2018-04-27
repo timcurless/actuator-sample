@@ -55,7 +55,7 @@ podTemplate(
             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
           {
             sh """
-              /root/.local/bin/aws eks describe-cluster --cluster-name eks-dev --region us-west-2
+              aws eks describe-cluster --cluster-name eks-dev --region us-west-2
             """
           }
         }
