@@ -61,7 +61,7 @@ podTemplate(
               env | grep EKS
             """
             sh """
-              sed -i -e 's/<endpoint-url>/\$(aws eks describe-cluster --cluster-name eks-dev --region us-west-2 --query "cluster.masterEndpoint")/g' /root/.kube/config-eks
+              sed -i -e 's/<endpoint-url>/`aws eks describe-cluster --cluster-name eks-dev --region us-west-2 --query "cluster.masterEndpoint"`/g' /root/.kube/config-eks
             """
             sh """
               cat /root/.kube/config-eks
