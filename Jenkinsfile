@@ -63,7 +63,7 @@ podTemplate(
             sh """
               cat /root/.kube/config-eks
               export KUBECONFIG=\$KUBECONFIG:/root/.kube/config-eks
-              kubectl get all
+              kubectl get nodes
             """
           }
         }
