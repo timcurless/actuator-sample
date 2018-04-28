@@ -59,7 +59,6 @@ podTemplate(
             """
             sh 'export EKSNAME=$(aws eks describe-cluster --cluster-name eks-dev --region us-west-2 --query "cluster.clusterName") && echo $EKSNAME && sed -i -e \'s@<cluster-name>@\'"$EKSNAME"\'@g\' /root/.kube/config-eks'
             sh """
-              env | grep EKS
               cat /root/.kube/config-eks
               export KUBECONFIG=\$KUBECONFIG:/root/.kube/config-eks
               kubectl get all
