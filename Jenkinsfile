@@ -50,9 +50,7 @@ podTemplate(
       stage('Deploy App') {
         container('awseks') {
           withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',
-            credentialsId: 'EKS-API-User',
-            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
+            credentialsId: 'EKS-API-User']])
           {
             sh """
               curl -O https://amazon-eks.s3-us-west-2.amazonaws.com/2018-04-04/eks-2017-11-01.normal.json
