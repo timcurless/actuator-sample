@@ -61,7 +61,7 @@ podTemplate(
             sh """
               export EKSKEY=\$(aws eks describe-cluster --cluster-name eks-dev --region us-west-2 --query "cluster.certificateAuthority.data")
               env | grep EKS
-              sed -i -e 's/<endpoint-url>/\$$EKSURL/g' /root/.kube/config-eks
+              sed -i -e 's/<endpoint-url>/${env.EKSURL}/g' /root/.kube/config-eks
               cat /root/.kube/config-eks
               export KUBECONFIG=\$KUBECONFIG:/root/.kube/config-eks
               kubectl get all
