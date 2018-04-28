@@ -55,12 +55,11 @@ podTemplate(
             sh """
               curl -O https://amazon-eks.s3-us-west-2.amazonaws.com/2018-04-04/eks-2017-11-01.normal.json
               aws configure add-model --service-model file://eks-2017-11-01.normal.json --service-name eks
-              export EKSNAME=\$(aws eks describe-cluster --cluster-name eks-dev --region us-west-2 --query "cluster.clusterName")
               export EKSKEY=\$(aws eks describe-cluster --cluster-name eks-dev --region us-west-2 --query "cluster.certificateAuthority.data")
-              env | grep EKS
             """
-            sh 'echo $EKSNAME && sed -i -e \'s@<cluster-name>@\'"$EKSNAME"\'@g\' /root/.kube/config-eks'
+            sh 'export EKSNAME=$(aws eks describe-cluster --cluster-name eks-dev --region us-west-2 --query "cluster.clusterName") && echo $EKSNAME && sed -i -e \'s@<cluster-name>@\'"$EKSNAME"\'@g\' /root/.kube/config-eks'
             sh """
+              env | grep EKS
               cat /root/.kube/config-eks
               export KUBECONFIG=\$KUBECONFIG:/root/.kube/config-eks
               kubectl get all
