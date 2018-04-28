@@ -58,7 +58,9 @@ podTemplate(
               export EKSNAME=\$(aws eks describe-cluster --cluster-name eks-dev --region us-west-2 --query "cluster.clusterName")
               export EKSKEY=\$(aws eks describe-cluster --cluster-name eks-dev --region us-west-2 --query "cluster.certificateAuthority.data")
               env | grep EKS
-              sed -i -e 's@<cluster-name>@'"$EKSNAME"'@g' /root/.kube/config-eks
+            """
+            sh 'sed -i -e \'s@<cluster-name>@\'"$EKSNAME"\'@g\' /root/.kube/config-eks'
+            sh """
               cat /root/.kube/config-eks
               export KUBECONFIG=\$KUBECONFIG:/root/.kube/config-eks
               kubectl get all
