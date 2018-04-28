@@ -6,7 +6,7 @@ podTemplate(
   containers: [
     containerTemplate(name: 'maven', image: 'maven:alpine', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
-    containerTemplate(name: 'awseks', image: 'timcurless/aws-eks-api:v2', alwaysPullImage: true, command: 'cat', ttyEnabled: true)
+    containerTemplate(name: 'awseks', image: 'timcurless/aws-eks-api:v3', alwaysPullImage: true, command: 'cat', ttyEnabled: true)
   ],
   volumes: [
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
