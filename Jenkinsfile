@@ -61,7 +61,8 @@ podTemplate(
             sh 'export EKSKEY=$(aws eks describe-cluster --cluster-name eks-dev --region us-west-2 --query "cluster.certificateAuthority.data") && sed -i -e \'s@<base64-encoded-ca-cert>@\'"$EKSKEY"\'@g\' /root/.kube/config-eks'
             sh """
               export KUBECONFIG=\$KUBECONFIG:/root/.kube/config-eks
-              kubectl config view
+              kubectl config get-contexts
+              kubectl get nodes
             """
           }
         }
