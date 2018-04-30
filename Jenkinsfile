@@ -52,6 +52,8 @@ podTemplate(
           withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',
             credentialsId: 'EKS-API-User']])
           {
+            sh 'touch ~/.aws/credentials && echo \'[default]\\naws_access_key_id=${env.AWS_ACCESS_KEY_ID}\' >~/.aws/credentials'
+            sh 'cat ~/.aws/credentials'
             sh """
               curl -O https://amazon-eks.s3-us-west-2.amazonaws.com/2018-04-04/eks-2017-11-01.normal.json
               aws configure add-model --service-model file://eks-2017-11-01.normal.json --service-name eks
