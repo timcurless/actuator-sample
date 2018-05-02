@@ -59,9 +59,7 @@ podTemplate(
             sh 'export EKSNAME=$(aws eks describe-cluster --cluster-name eks-dev --region us-west-2 --query "cluster.clusterName") && sed -i -e \'s@<cluster-name>@\'"$EKSNAME"\'@g\' /root/.kube/config-eks'
             sh 'export EKSURL=$(aws eks describe-cluster --cluster-name eks-dev --region us-west-2 --query "cluster.masterEndpoint") && sed -i -e \'s@<endpoint-url>@\'"$EKSURL"\'@g\' /root/.kube/config-eks'
             sh 'export EKSKEY=$(aws eks describe-cluster --cluster-name eks-dev --region us-west-2 --query "cluster.certificateAuthority.data") && sed -i -e \'s@<base64-encoded-ca-cert>@\'"$EKSKEY"\'@g\' /root/.kube/config-eks'
-            sh 'cat /root/.kube/config-eks && ls -al /root/.kube/'
-            sh 'curl -s 169.254.169.254/latest/meta-data/iam/security-credentials/'
-            sh 'kubectl get nodes --kubeconfig=/root/.kube/config-eks'
+            sh 'kubectl get all --kubeconfig=/root/.kube/config-eks'
           }
         }
       }
