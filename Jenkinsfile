@@ -63,7 +63,7 @@ podTemplate(
               export KUBECONFIG=/root/.kube/config-eks
               sed -i -e 's@<tag>@${gitCommit}@g' deployment.yml
               cat deployment.yml
-              kubectl apply -f deployment.yml
+              kubectl --namespace=default apply -f deployment.yml
             """
           }
         }
