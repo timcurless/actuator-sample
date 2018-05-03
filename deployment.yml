@@ -11,9 +11,7 @@ spec:
     spec:
       containers:
       - name: actuator-sample
-        image: quay.io/timcurless/actuator-sample
-	      imagePullPolicy: Always
-	      ports:
-	      - containerPort: 8080
-      imagePullSecrets:
-        - name: quay.io
+        image: quay.io/timcurless/actuator-sample:<tag>
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
