@@ -1,13 +1,20 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   name: actuator-sample
 spec:
+  selector:
+    matchLabels:
+      type: api
+      service: actuator-sample
+  strategy:
+    type: Recreate
   replicas: 2
   template:
     metadata:
       labels:
-        app: actuator-sample
+        type: api
+        service: actuator-sample
     spec:
       containers:
       - name: actuator-sample
@@ -15,3 +22,19 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
+          name: http-server
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: actuator-sample
+spec:
+  ports:
+  - port: 80
+    targetPort: http-server
+  selector:
+    type: api
+    service: actuator-sample
+  type: LoadBalancer
