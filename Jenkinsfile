@@ -24,6 +24,12 @@ podTemplate(
       def myRepo = checkout scm
       def gitCommit = myRepo.GIT_COMMIT
 
+      stage('Check Code Quality') {
+        withSonarQubeEnv('SonarQube Scanner') {
+          sh 'mvn clean package sonar:sonar'
+        }
+      }
+
       stage('Build App') {
         container('maven') {
           sh "mvn package -B"
